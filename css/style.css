@@ -2608,3 +2608,410 @@ html.js [data-stagger].is-visible > *:nth-child(6) {
 
 
 
+
+/* =========================================
+   DZAAAI PORTAL INTRO — ISOLATED CSS
+========================================= */
+
+.dzaai-portal-intro {
+    --portal-gold: #e9c681;
+    --portal-cream: #fff4e5;
+    --portal-burgundy: #430018;
+
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 680px;
+    overflow: hidden;
+    background: #21000d;
+    isolation: isolate;
+    z-index: 1;
+}
+
+.dzaai-portal-scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    perspective: 1800px;
+    overflow: hidden;
+}
+
+/* Background */
+
+.dzaai-portal-background {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(35, 0, 12, .3), rgba(35, 0, 12, .55)),
+        url("../images/banners/royal-doors.jpg") center / cover no-repeat;
+    transform: scale(1.04);
+}
+
+.dzaai-portal-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center,
+            rgba(231, 184, 108, .16),
+            transparent 60%),
+        linear-gradient(90deg,
+            rgba(25, 0, 10, .35),
+            transparent 50%,
+            rgba(25, 0, 10, .35));
+}
+
+/* Welcome */
+
+.dzaai-portal-welcome {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    color: var(--portal-cream);
+}
+
+.dzaai-portal-eyebrow {
+    display: inline-block;
+    margin-bottom: 22px;
+    color: var(--portal-gold);
+    font-size: 11px;
+    letter-spacing: 5px;
+}
+
+.dzaai-portal-welcome h1 {
+    margin: 0;
+    font-size: clamp(38px, 6vw, 82px);
+    font-weight: 500;
+    letter-spacing: -2px;
+}
+
+.dzaai-portal-welcome h1 span {
+    color: var(--portal-gold);
+}
+
+.dzaai-portal-welcome p {
+    margin-top: 16px;
+    font-size: clamp(16px, 2vw, 22px);
+    letter-spacing: 3px;
+}
+
+.dzaai-portal-scroll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 65px;
+    color: var(--portal-gold);
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.dzaai-portal-scroll-line {
+    width: 1px;
+    height: 48px;
+    background: var(--portal-gold);
+    transform-origin: top;
+    animation: dzaaiPortalScroll 1.7s infinite;
+}
+
+@keyframes dzaaiPortalScroll {
+    0%, 100% { transform: scaleY(.4); opacity: .5; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Revealed content */
+
+.dzaai-portal-content {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 55px 6%;
+    color: var(--portal-cream);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dzaai-portal-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.dzaai-portal-heading > span {
+    color: var(--portal-gold);
+    font-size: 10px;
+    letter-spacing: 4px;
+}
+
+.dzaai-portal-heading h2 {
+    margin: 12px 0 0;
+    font-size: clamp(25px, 3vw, 42px);
+    font-weight: 500;
+}
+
+.dzaai-portal-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    width: min(100%, 1000px);
+}
+
+.dzaai-portal-card {
+    position: relative;
+    padding: 32px;
+    border: 1px solid rgba(233, 198, 129, .5);
+    background: rgba(44, 0, 17, .82);
+    backdrop-filter: blur(12px);
+    transition: transform .35s ease, border-color .35s ease;
+}
+
+.dzaai-portal-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--portal-gold);
+}
+
+.dzaai-portal-number {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    color: rgba(233, 198, 129, .3);
+    font-size: 34px;
+}
+
+.dzaai-portal-card-label {
+    color: var(--portal-gold);
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+.dzaai-portal-card h3 {
+    margin: 17px 0 12px;
+    font-size: clamp(23px, 2.5vw, 32px);
+    color: var(--portal-cream);
+}
+
+.dzaai-portal-card p {
+    color: rgba(255, 244, 229, .75);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.dzaai-portal-card ul {
+    padding-left: 18px;
+    margin: 20px 0;
+    color: rgba(255, 244, 229, .85);
+    font-size: 13px;
+    line-height: 2;
+}
+
+.dzaai-portal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 5px;
+    color: var(--portal-gold);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.dzaai-portal-link span {
+    font-size: 19px;
+    transition: transform .3s ease;
+}
+
+.dzaai-portal-link:hover span {
+    transform: translate(4px, -4px);
+}
+
+.dzaai-portal-footer {
+    margin-top: 32px;
+    color: var(--portal-gold);
+    font-size: 11px;
+    letter-spacing: 5px;
+}
+
+.dzaai-portal-footer span {
+    padding: 0 8px;
+}
+
+/* Door panels */
+
+.dzaai-portal-door {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg,
+            rgba(0, 0, 0, .35),
+            transparent 25%,
+            rgba(255, 220, 160, .08) 50%,
+            rgba(0, 0, 0, .3)),
+        linear-gradient(145deg, #68102e, #31000f 65%, #1d0009);
+    border: 8px solid #bd9251;
+    box-shadow:
+        inset 0 0 0 3px rgba(255, 221, 160, .35),
+        inset 0 0 40px rgba(0, 0, 0, .6);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.dzaai-portal-door-left {
+    left: 0;
+    transform-origin: left center;
+    border-right: 3px solid var(--portal-gold);
+}
+
+.dzaai-portal-door-right {
+    right: 0;
+    transform-origin: right center;
+    border-left: 3px solid var(--portal-gold);
+}
+
+.dzaai-portal-door-design {
+    position: absolute;
+    inset: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(233, 198, 129, .65);
+    outline: 1px solid rgba(233, 198, 129, .35);
+    outline-offset: -13px;
+}
+
+.dzaai-portal-door-emblem {
+    display: grid;
+    place-items: center;
+    width: 100px;
+    height: 100px;
+    border: 2px solid var(--portal-gold);
+    border-radius: 50%;
+    color: var(--portal-gold);
+    font-family: Georgia, serif;
+    font-size: 65px;
+}
+
+.dzaai-portal-door-line {
+    width: 65%;
+    height: 1px;
+    margin-top: 35px;
+    background: var(--portal-gold);
+}
+
+.dzaai-portal-door-handle {
+    position: absolute;
+    top: 50%;
+    width: 13px;
+    height: 70px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #9b6a30, #ffe3a5, #a66c2e);
+    box-shadow: 0 0 12px rgba(233, 198, 129, .3);
+}
+
+.dzaai-portal-door-left .dzaai-portal-door-handle {
+    right: 25px;
+}
+
+.dzaai-portal-door-right .dzaai-portal-door-handle {
+    left: 25px;
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 768px) {
+    .dzaai-portal-intro {
+        min-height: 850px;
+        height: 100vh;
+    }
+
+    .dzaai-portal-content {
+        padding: 35px 18px;
+    }
+
+    .dzaai-portal-cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 500px;
+    }
+
+    .dzaai-portal-heading {
+        margin-bottom: 18px;
+    }
+
+    .dzaai-portal-card {
+        padding: 20px;
+    }
+
+    .dzaai-portal-card p {
+        margin-bottom: 8px;
+    }
+
+    .dzaai-portal-card ul {
+        margin: 10px 0;
+        line-height: 1.7;
+    }
+
+    .dzaai-portal-footer {
+        margin-top: 18px;
+        letter-spacing: 3px;
+    }
+
+    .dzaai-portal-door {
+        border-width: 5px;
+    }
+
+    .dzaai-portal-door-design {
+        inset: 18px 10px;
+    }
+
+    .dzaai-portal-door-emblem {
+        width: 55px;
+        height: 55px;
+        font-size: 35px;
+    }
+
+    .dzaai-portal-door-handle {
+        width: 8px;
+        height: 45px;
+    }
+
+    .dzaai-portal-door-left .dzaai-portal-door-handle {
+        right: 12px;
+    }
+
+    .dzaai-portal-door-right .dzaai-portal-door-handle {
+        left: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dzaai-portal-welcome h1 {
+        letter-spacing: -1px;
+    }
+
+    .dzaai-portal-eyebrow {
+        letter-spacing: 2px;
+        font-size: 9px;
+    }
+
+    .dzaai-portal-scroll {
+        margin-top: 45px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dzaai-portal-scroll-line {
+        animation: none;
+    }
+}

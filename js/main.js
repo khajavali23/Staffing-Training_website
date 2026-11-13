@@ -557,3 +557,82 @@
 
 
 
+
+/* =========================================
+   DZAAAI PORTAL INTRO — GSAP ANIMATION
+========================================= */
+
+(function () {
+    function initDzaaiPortalIntro() {
+        const section = document.querySelector("#dzaaiPortalIntro");
+
+        if (!section || typeof gsap === "undefined" ||
+            typeof ScrollTrigger === "undefined") {
+            return;
+        }
+
+        if (section.dataset.portalInitialized === "true") {
+            return;
+        }
+
+        section.dataset.portalInitialized = "true";
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const leftDoor = section.querySelector(".dzaai-portal-door-left");
+        const rightDoor = section.querySelector(".dzaai-portal-door-right");
+        const welcome = section.querySelector(".dzaai-portal-welcome");
+        const content = section.querySelector(".dzaai-portal-content");
+        const background = section.querySelector(".dzaai-portal-background");
+
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: "top top",
+                end: isMobile ? "+=100%" : "+=150%",
+                scrub: 1,
+                pin: true,
+                anticipatePin: 1,
+                invalidateOnRefresh: true
+            }
+        });
+
+        timeline
+            .to(welcome, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 0.35
+            }, 0)
+
+            .to(background, {
+                scale: 1.12,
+                duration: 1
+            }, 0)
+
+            .to(leftDoor, {
+                rotationY: -110,
+                duration: 1,
+                ease: "power2.inOut"
+            }, 0.15)
+
+            .to(rightDoor, {
+                rotationY: 110,
+                duration: 1,
+                ease: "power2.inOut"
+            }, 0.15)
+
+            .to(content, {
+                autoAlpha: 1,
+                duration: 0.5,
+                ease: "power2.out"
+            }, 0.65);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initDzaaiPortalIntro);
+    } else {
+        initDzaaiPortalIntro();
+    }
+})();
