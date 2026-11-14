@@ -558,81 +558,275 @@
 
 
 
-/* =========================================
-   DZAAAI PORTAL INTRO — GSAP ANIMATION
-========================================= */
+/* ==========================================
+   DZAAAI — WORLD SELECTION ANIMATIONS
+   GSAP + ScrollTrigger
+========================================== */
 
-(function () {
-    function initDzaaiPortalIntro() {
-        const section = document.querySelector("#dzaaiPortalIntro");
+document.addEventListener("DOMContentLoaded", () => {
 
-        if (!section || typeof gsap === "undefined" ||
-            typeof ScrollTrigger === "undefined") {
-            return;
-        }
+    const section = document.querySelector("#dzWorlds");
 
-        if (section.dataset.portalInitialized === "true") {
-            return;
-        }
+    if (!section) return;
 
-        section.dataset.portalInitialized = "true";
+    const cards = section.querySelectorAll(".dz-world");
+    const heading = section.querySelector(".dz-worlds-top");
+    const signature = section.querySelector(".dz-worlds-signature");
 
+    const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // Basic fallback if GSAP is unavailable
+    if (typeof gsap === "undefined" || reducedMotion) {
+        section.classList.add("dz-worlds-ready");
+        return;
+    }
+
+    if (typeof ScrollTrigger !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
+    }
 
-        const leftDoor = section.querySelector(".dzaai-portal-door-left");
-        const rightDoor = section.querySelector(".dzaai-portal-door-right");
-        const welcome = section.querySelector(".dzaai-portal-welcome");
-        const content = section.querySelector(".dzaai-portal-content");
-        const background = section.querySelector(".dzaai-portal-background");
+    /* ----------------------------------
+       1. INITIAL STATES
+    ---------------------------------- */
 
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    gsap.set(heading.children, {
+        opacity: 0,
+        y: 35
+    });
 
-        const timeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: isMobile ? "+=100%" : "+=150%",
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true
-            }
+    gsap.set(cards, {
+        opacity: 0,
+        y: 75,
+        scale: 0.96
+    });
+
+    gsap.set(signature, {
+        opacity: 0,
+        y: 20
+    });
+
+    /* ----------------------------------
+       2. HEADING REVEAL
+    ---------------------------------- */
+
+    const intro = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top 78%",
+            once: true
+        }
+    });
+
+    intro.to(heading.children, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.18,
+        ease: "power3.out"
+    });
+
+    /* ----------------------------------
+       3. CINEMATIC CARD REVEAL
+    ---------------------------------- */
+
+    gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.25,
+        stagger: 0.25,
+        ease: "power4.out",
+        scrollTrigger: {
+            trigger: ".dz-worlds-grid",
+            start: "top 82%",
+            once: true
+        },
+        onComplete: () => {
+            cards.forEach(card => {
+                card.classList.add("dz-card-revealed");
+            });
+        }
+    });
+
+    /* ----------------------------------
+       4. SIGNATURE REVEAL
+    ---------------------------------- */
+
+    gsap.to(signature, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: signature,
+            start: "top 95%",
+            once: true
+        }
+    });
+
+    /* ----------------------------------
+       5. GOLD GLOW ANIMATION
+    ---------------------------------- */
+
+    cards.forEach((card, index) => {
+
+        const glow = card.querySelector(".dz-world-glow");
+
+        if (!glow) return;
+
+        gsap.to(glow, {
+            x: index === 0 ? 35 : -35,
+            y: 25,
+            duration: 4 + index,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
         });
 
-        timeline
-            .to(welcome, {
-                opacity: 0,
-                scale: 0.9,
-                duration: 0.35
-            }, 0)
+    });
 
-            .to(background, {
-                scale: 1.12,
-                duration: 1
-            }, 0)
+    /* ----------------------------------
+       6. CARD HOVER + IMAGE PARALLAX
+    ---------------------------------- */
 
-            .to(leftDoor, {
-                rotationY: -110,
-                duration: 1,
-                ease: "power2.inOut"
-            }, 0.15)
+    const desktop = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+    ).matches;
 
-            .to(rightDoor, {
-                rotationY: 110,
-                duration: 1,
-                ease: "power2.inOut"
-            }, 0.15)
+    if (desktop) {
 
-            .to(content, {
-                autoAlpha: 1,
-                duration: 0.5,
-                ease: "power2.out"
-            }, 0.65);
+        cards.forEach(card => {
+
+            const image = card.querySelector(".dz-world-image");
+            const content = card.querySelector(".dz-world-content");
+            const action = card.querySelector(".dz-world-action");
+
+            card.addEventListener("mousemove", event => {
+
+                const rect = card.getBoundingClientRect();
+
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateY = ((x - centerX) / centerX) * 2.5;
+                const rotateX = ((centerY - y) / centerY) * 2.5;
+
+                gsap.to(card, {
+                    rotateX,
+                    rotateY,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    transformPerspective: 1200
+                });
+
+                gsap.to(image, {
+                    x: ((x - centerX) / centerX) * -12,
+                    y: ((y - centerY) / centerY) * -10,
+                    duration: 0.7,
+                    ease: "power2.out"
+                });
+
+                gsap.to(content, {
+                    x: ((x - centerX) / centerX) * 5,
+                    y: ((y - centerY) / centerY) * 3,
+                    duration: 0.6,
+                    ease: "power2.out"
+                });
+
+            });
+
+            card.addEventListener("mouseleave", () => {
+
+                gsap.to(card, {
+                    rotateX: 0,
+                    rotateY: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+
+                gsap.to(image, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+
+                gsap.to(content, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+
+            });
+
+            /* Magnetic CTA */
+
+            card.addEventListener("mousemove", event => {
+
+                if (!action) return;
+
+                const rect = action.getBoundingClientRect();
+
+                const dx = event.clientX - (rect.left + rect.width / 2);
+                const dy = event.clientY - (rect.top + rect.height / 2);
+
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 110) {
+                    gsap.to(action, {
+                        x: dx * 0.10,
+                        y: dy * 0.10,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    gsap.to(action, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.4
+                    });
+                }
+
+            });
+
+            card.addEventListener("mouseleave", () => {
+                gsap.to(action, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.4
+                });
+            });
+
+        });
+
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initDzaaiPortalIntro);
-    } else {
-        initDzaaiPortalIntro();
+    /* ----------------------------------
+       7. SMOOTH SIGNATURE LIGHT EFFECT
+    ---------------------------------- */
+
+    gsap.to(".dz-signature-dot", {
+        opacity: 0.35,
+        scale: 0.7,
+        duration: 1.2,
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.3,
+        ease: "sine.inOut"
+    });
+
+    /* ----------------------------------
+       8. REFRESH SCROLL TRIGGER
+    ---------------------------------- */
+
+    if (typeof ScrollTrigger !== "undefined") {
+        ScrollTrigger.refresh();
     }
-})();
+
+});
